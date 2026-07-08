@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="SUZUME - Journey to the Ever-After, an immersive static web experience.">
+  <title>SUZUME - Journey to the Ever-After</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://suzume-tojimari-movie.jp">
+  <link rel="preload" as="image" href="https://suzume-tojimari-movie.jp/assets/images/ver3/top/v-pc.jpg?ver=1">
+  <link rel="preload" as="image" href="https://suzume-tojimari-movie.jp/assets/images/ver4/top/v2-pc.jpg?ver=3">
+  <link rel="preload" as="image" href="https://suzume-tojimari-movie.jp/assets/images/ver3/story/v-pc.jpg?ver=1">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/styles.css">
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <noscript>
+    <div class="noscript">This experience needs JavaScript enabled.</div>
+  </noscript>
+
+  <div id="cursor"></div>
+  <div id="dot"></div>
+  <canvas id="bgc"></canvas>
+
+  <div id="loading">
+    <div class="l-kanji">すずめ</div>
+    <div class="l-percent" id="lpct">0%</div>
+    <div class="l-line"><div class="l-bar" id="lbar"></div></div>
+    <div class="l-txt">OPENING THE DOOR</div>
+    <div class="l-sub">Journey to the Ever-After</div>
+  </div>
+
+  <button id="abtn" type="button" title="Toggle ambient music" aria-label="Toggle ambient music">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  </button>
+  <div id="awav" aria-hidden="true"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+
+  <nav id="navd" aria-label="Page sections">
+    <button class="ndot on" type="button" data-s="0" data-label="Landing" aria-label="Landing"></button>
+    <button class="ndot" type="button" data-s="1" data-label="Journey" aria-label="Journey"></button>
+    <button class="ndot" type="button" data-s="2" data-label="Characters" aria-label="Characters"></button>
+    <button class="ndot" type="button" data-s="3" data-label="Story" aria-label="Story"></button>
+    <button class="ndot" type="button" data-s="4" data-label="The Door" aria-label="The Door"></button>
+    <button class="ndot" type="button" data-s="5" data-label="Cinematic" aria-label="Cinematic"></button>
+    <button class="ndot" type="button" data-s="6" data-label="Ending" aria-label="Ending"></button>
+  </nav>
+
+  <div id="dimov" role="dialog" aria-modal="true" aria-label="The Ever-After">
+    <canvas id="dimc"></canvas>
+    <div class="dim-center">
+      <div class="dim-rings">
+        <div class="dim-ring dr1"></div>
+        <div class="dim-ring dr2"></div>
+        <div class="dim-ring dr3"></div>
+        <div class="dim-ring dr4"></div>
+        <div class="dim-ring dr5"></div>
+        <div class="dim-core"></div>
+      </div>
+    </div>
+    <div class="dtxt">
+      "In the Ever-After, all lost places come to rest."<br>
+      <span>- The Realm Between Worlds</span>
+    </div>
+    <button class="dclose" type="button" onclick="closeDim()">CLOSE THE DOOR</button>
+  </div>
+
+  <div id="chovl" role="dialog" aria-modal="true" aria-label="Character details">
+    <div class="covlc">
+      <button class="xbtn" type="button" onclick="closeChar()">CLOSE</button>
+      <div id="covla" style="width:100px;height:100px;border-radius:50%;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;font-size:3.4rem;"></div>
+      <div class="covln" id="covln"></div>
+      <div class="covljp" id="covljp"></div>
+      <div class="covlr" id="covlr"></div>
+      <div class="covld" id="covld"></div>
+      <div class="covlm">
+        <div class="covlmh">KEY MOMENTS</div>
+        <div id="covlm"></div>
+      </div>
+    </div>
+  </div>
+
+  <section id="land">
+    <div class="clayer" id="cloudLayer">
+      <div class="cld a"></div><div class="cld b"></div>
+      <div class="cld c"></div><div class="cld d"></div><div class="cld e"></div>
+    </div>
+    <div class="rays">
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+      <div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    </div>
+    <div class="hglow"></div>
+
+    <div class="lcon" id="lcon">
+      <div class="jpt">す ず め の と じ ま り</div>
+      <h1 class="mtitle"><span class="tglow"></span>SUZUME</h1>
+      <div class="subtit">Journey to the Ever-After</div>
+      <div class="subtit2">An Immersive Experience</div>
+      <button class="ctabtn" type="button" onclick="beginJ()">Begin the Journey</button>
+    </div>
+
+    <button class="dcon" id="landDoor" type="button" onclick="scrollTo1()" aria-label="Scroll to journey map">
+      <span class="darch" id="landArch">
+        <span class="dburst"></span>
+        <span class="dglow"></span>
+        <span class="dpanel"><span class="dline"></span></span>
+        <span class="dknob"></span>
+        <span class="dfr"></span>
+      </span>
+    </button>
+
+    <div class="sfig" id="sfig" aria-hidden="true">
+      <div class="shead">
+        <div class="shair"></div>
+        <div class="hfloat"></div>
+        <div class="hfloat2"></div>
+        <div class="seye l"></div>
+        <div class="seye r"></div>
+      </div>
+      <div class="storso">
+        <div class="sscarf"></div>
+        <div class="sarm sal"></div>
+        <div class="sarm sar"></div>
+      </div>
+      <div class="sskirt"></div>
+      <div class="slegs"><div class="leg"></div><div class="leg"></div></div>
+    </div>
+
+    <div class="shi">
+      <div class="sline"></div>
+      <span>SCROLL TO EXPLORE</span>
+    </div>
+  </section>
+
+  <section id="map">
+    <div class="sheader rv">
+      <span class="snum">02 - The Journey</span>
+      <h2 class="stitle">Across Japan, Beyond Time</h2>
+      <p class="ssub">From the shores of Miyazaki to the heart of Tokyo - every road opened a new door.</p>
+    </div>
+
+    <div class="mwrap rv d2">
+      <svg viewBox="0 0 820 460" xmlns="http://www.w3.org/2000/svg" class="mapsvg" aria-hidden="true">
+        <g opacity=".22">
+          <circle cx="55" cy="30" r="1" fill="white"/><circle cx="138" cy="14" r="1.4" fill="white"/>
+          <circle cx="214" cy="46" r="1" fill="white"/><circle cx="299" cy="20" r="1.2" fill="white"/>
+          <circle cx="375" cy="36" r="1.5" fill="white"/><circle cx="472" cy="10" r="1" fill="white"/>
+          <circle cx="562" cy="42" r="1.2" fill="white"/><circle cx="665" cy="26" r="1" fill="white"/>
+          <circle cx="714" cy="56" r="1.5" fill="white"/><circle cx="110" cy="80" r="1" fill="white"/>
+          <circle cx="425" cy="70" r="1" fill="white"/><circle cx="615" cy="90" r="1.2" fill="white"/>
+          <circle cx="762" cy="38" r="1" fill="white"/><circle cx="32" cy="58" r="1.2" fill="white"/>
+          <circle cx="800" cy="100" r="1" fill="white"/><circle cx="188" cy="140" r="1" fill="white"/>
+        </g>
+        <ellipse cx="410" cy="65" rx="130" ry="44" fill="rgba(192,132,252,.03)" stroke="rgba(192,132,252,.22)" stroke-width="1" stroke-dasharray="4 5"/>
+        <text x="410" y="62" text-anchor="middle" fill="rgba(192,132,252,.5)" font-size="10" font-family="Cormorant Garamond" font-style="italic" letter-spacing="4">THE EVER-AFTER</text>
+        <line x1="410" y1="109" x2="410" y2="228" stroke="rgba(192,132,252,.16)" stroke-width="1" stroke-dasharray="3 4"/>
+        <path d="M 112 370 Q 162 295 235 272 Q 295 254 346 242 Q 415 228 466 212 Q 516 194 576 182 Q 634 172 680 158"
+          fill="none" stroke="rgba(255,209,102,.14)" stroke-width="1.5" stroke-dasharray="7 5"/>
+        <path id="panim" d="M 112 370 Q 162 295 235 272 Q 295 254 346 242 Q 415 228 466 212 Q 516 194 576 182 Q 634 172 680 158"
+          fill="none" stroke="url(#pg)" stroke-width="2.5" stroke-dasharray="900" stroke-dashoffset="900"/>
+        <defs>
+          <linearGradient id="pg" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffd166"/>
+            <stop offset="100%" stop-color="#f4873f"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <button class="mnode ng" type="button" style="left:13.7%;top:80.4%;" onmouseenter="showPop(this,'Miyazaki','Where Suzume\'s journey begins, in the quiet southern city by the sea.')" onmouseleave="hidePop()" aria-label="Miyazaki">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel">Miyazaki<br><span>Origin</span></span>
+      </button>
+      <button class="mnode no" type="button" style="left:28.7%;top:59.1%;" onmouseenter="showPop(this,'The Ruins','An abandoned mountain resort - the first door, hidden in overgrown stone.')" onmouseleave="hidePop()" aria-label="The Ruins">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel">The Ruins</span>
+      </button>
+      <button class="mnode nb" type="button" style="left:42.2%;top:52.6%;" onmouseenter="showPop(this,'Ehime','A port town by the Seto Sea, with an old friend and a new farewell.')" onmouseleave="hidePop()" aria-label="Ehime">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel">Ehime</span>
+      </button>
+      <button class="mnode nt" type="button" style="left:56.8%;top:46.1%;" onmouseenter="showPop(this,'Kobe','The city on the slope, where memories of disaster still linger in the earth.')" onmouseleave="hidePop()" aria-label="Kobe">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel">Kobe</span>
+      </button>
+      <button class="mnode np" type="button" style="left:50%;top:24.1%;" onmouseenter="showPop(this,'The Ever-After','The realm between worlds - where all lost places gather in eternal stillness.')" onmouseleave="hidePop()" aria-label="The Ever-After">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel nlabelL">Ever-After<br><span>Realm</span></span>
+      </button>
+      <button class="mnode npk" type="button" style="left:71%;top:39.1%;" onmouseenter="showPop(this,'Nagoya','A brief rest at Rumi\'s host club - warmth in a neon-lit city.')" onmouseleave="hidePop()" aria-label="Nagoya">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel nlabelL">Nagoya</span>
+      </button>
+      <button class="mnode nr" type="button" style="left:82.9%;top:34.3%;" onmouseenter="showPop(this,'Tokyo','The final door. The great worm. The ultimate sacrifice and the path home.')" onmouseleave="hidePop()" aria-label="Tokyo">
+        <span class="nring"><span class="ndot2"></span></span>
+        <span class="nlabel nlabelL">Tokyo<br><span>Finale</span></span>
+      </button>
+
+      <div id="mpop" class="mpop"><h4 id="popt"></h4><p id="popd"></p></div>
+    </div>
+  </section>
+
+  <section id="chars">
+    <div class="sheader rv">
+      <span class="snum">03 - The Souls</span>
+      <h2 class="stitle">Those Who Walk Between Worlds</h2>
+      <p class="ssub">Each carries a wound. Each carries a light.</p>
+    </div>
+
+    <div class="cgrid">
+      <button class="ccard cc-su rv d1" type="button" onclick="openChar('su')">
+        <span class="cart art-su"><span class="cgring rsu"></span>🌸</span>
+        <span class="cname">Suzume Iwato</span>
+        <span class="cjp">岩 戸 鈴 芽</span>
+        <span class="crole">The door-closer's companion.<br>A girl chasing something she cannot name.</span>
+        <span class="carc">Haunted by a childhood memory she buried, Suzume finds courage in motion - in closing what must be closed, and opening what must be opened within herself.</span>
+        <span class="ctag">Protagonist</span>
+      </button>
+      <button class="ccard cc-so rv d2" type="button" onclick="openChar('so')">
+        <span class="cart art-so"><span class="cgring rso"></span>🪑</span>
+        <span class="cname">Souta Munakata</span>
+        <span class="cjp">宗 像 草 太</span>
+        <span class="crole">A Closer. Guardian of the sealed doors that hold back catastrophe.</span>
+        <span class="carc">Duty-bound and lonely, Souta's life is service to a world that doesn't know his sacrifice. Cursed into a chair, he must trust another to carry what he's always borne alone.</span>
+        <span class="ctag">The Closer</span>
+      </button>
+      <button class="ccard cc-da rv d3" type="button" onclick="openChar('da')">
+        <span class="cart art-da"><span class="cgring rda"></span>🐱</span>
+        <span class="cname">Daijin</span>
+        <span class="cjp">大 臣</span>
+        <span class="crole">Former keystone of the western door. A white cat seeking freedom.</span>
+        <span class="carc">Ancient and mischievous, Daijin knows a loneliness older than memory. What seems like chaos is really the cry of something that only wanted to be loved - not needed.</span>
+        <span class="ctag">The Keystone</span>
+      </button>
+      <button class="ccard cc-sa rv d4" type="button" onclick="openChar('sa')">
+        <span class="cart art-sa"><span class="cgring rsa"></span>🖤</span>
+        <span class="cname">Sadaijin</span>
+        <span class="cjp">左 大 臣</span>
+        <span class="crole">The great black cat. Keystone of the eastern door.</span>
+        <span class="carc">Where Daijin is light and restless, Sadaijin is deep and patient. He holds the weight of the east in silence - a guardian who never asked for the role, yet never abandoned it.</span>
+        <span class="ctag">The Guardian</span>
+      </button>
+      <button class="ccard cc-ta rv d1" type="button" onclick="openChar('ta')">
+        <span class="cart art-ta"><span class="cgring rta"></span>💗</span>
+        <span class="cname">Tamaki Iwato</span>
+        <span class="cjp">岩 戸 環</span>
+        <span class="crole">Suzume's aunt. The one who stayed when everything fell away.</span>
+        <span class="carc">She built a life from the pieces of someone else's tragedy. Tamaki's love doesn't know how to say itself - it just shows up, day after quiet day, until it's the whole world.</span>
+        <span class="ctag">The Anchor</span>
+      </button>
+    </div>
+  </section>
+
+  <section id="story">
+    <div class="sheader rv">
+      <span class="snum">04 - The Tale</span>
+      <h2 class="stitle">The Visual Chronicle</h2>
+      <p class="ssub">Walk through the chapters. Each door holds a memory.</p>
+    </div>
+
+    <div class="swrap">
+      <div class="chnav" id="chnav"></div>
+      <div class="chdisp rv d2">
+        <div class="chscene" id="chscene">
+          <div class="sbg" id="sbg"></div>
+          <canvas id="sceneCanvas"></canvas>
+          <div class="scenetitle" id="scenetitle">
+            <span class="scepenum" id="scenum"></span>
+            <span id="scename"></span>
+          </div>
+        </div>
+        <div class="chtxt">
+          <div class="spkname" id="spkn"></div>
+          <div class="dlg" id="dlg"><span class="twc"></span></div>
+          <div class="sctrl">
+            <button class="sbtn" id="pbtn" type="button" onclick="prevCh()" disabled>Prev</button>
+            <div class="sprogr" id="sprogr">I / VIII</div>
+            <button class="sbtn" id="nbtn" type="button" onclick="nextCh()">Next</button>
+          </div>
+          <div class="schint">Press arrow keys to navigate · Tap to advance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="door">
+    <div class="door-outer rv">
+      <span class="snum">05 - The Portal</span>
+      <h2 class="stitle">The Door Between Worlds</h2>
+      <p class="ssub">Some doors lead to rooms. Some doors lead to <em>everywhere</em>.</p>
+
+      <div class="door-scene">
+        <div class="door-glow-ring"></div>
+        <div class="door-glow-ring2"></div>
+        <div class="door-frame"></div>
+        <button class="dmdoor" id="dmdoor" type="button" onclick="handleDoorClick()" aria-label="Open the door">
+          <span class="dil"></span>
+          <span class="dmpanel"><span class="dmpd"></span></span>
+          <span class="dmknob"></span>
+        </button>
+        <div class="door-behind">
+          <span class="dstar">✦</span>
+        </div>
+      </div>
+      <p class="dmhint" id="dmhint">CLICK TO OPEN THE DOOR</p>
+    </div>
+  </section>
+
+  <section id="cine">
+    <div class="sheader rv">
+      <span class="snum">06 - The Moments</span>
+      <h2 class="stitle">Fragments of Forever</h2>
+      <p class="ssub">Six heartbeats that changed everything.</p>
+    </div>
+
+    <div class="cgrd">
+      <button class="mcard rv" type="button">
+        <span class="mscn">
+          <span class="mbg sc1"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">🚪</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-door"></span>
+          <span class="minfo"><span class="mnum">MOMENT I</span><span class="mtit">The First Door</span><span class="mdesc">Golden light pours through forgotten ruins.</span></span>
+        </span>
+      </button>
+
+      <button class="mcard rv d1" type="button">
+        <span class="mscn">
+          <span class="mbg sc2"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">🪑</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-chair">🪑</span>
+          <span class="minfo"><span class="mnum">MOMENT II</span><span class="mtit">Souta's Curse</span><span class="mdesc">The man becomes the chair - and the chair carries a soul.</span></span>
+        </span>
+      </button>
+
+      <button class="mcard rv d2" type="button">
+        <span class="mscn">
+          <span class="mbg sc3"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">🐱</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-cat">🐱</span>
+          <span class="minfo"><span class="mnum">MOMENT III</span><span class="mtit">Daijin Dances</span><span class="mdesc">Chaos wrapped in white fur, joy masked as mischief.</span></span>
+        </span>
+      </button>
+
+      <button class="mcard rv" type="button">
+        <span class="mscn">
+          <span class="mbg sc4"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">✦</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-stars-bg"></span>
+          <span class="moment-stars">✦ ✦ ✦ ✦ ✦</span>
+          <span class="minfo"><span class="mnum">MOMENT IV</span><span class="mtit">A Starlit Road</span><span class="mdesc">Under ten thousand stars, the journey feels eternal.</span></span>
+        </span>
+      </button>
+
+      <button class="mcard rv d1" type="button">
+        <span class="mscn">
+          <span class="mbg sc5"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">🌊</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-worm-bg"></span>
+          <span class="moment-worm">THE WORM STIRS</span>
+          <span class="minfo"><span class="mnum">MOMENT V</span><span class="mtit">The Worm Rises</span><span class="mdesc">The earth trembles. The ancient force stirs beneath Japan.</span></span>
+        </span>
+      </button>
+
+      <button class="mcard rv d2" type="button">
+        <span class="mscn">
+          <span class="mbg sc6"></span>
+          <span class="mcard-overlay"><span class="mcard-icon">🌅</span></span>
+          <span class="mcard-shimmer"></span>
+          <span class="moment-together">🌸 ✦ 🌸</span>
+          <span class="minfo"><span class="mnum">MOMENT VI</span><span class="mtit">Together in the Ever-After</span><span class="mdesc">When all doors close, only the heart remains open.</span></span>
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <section id="end">
+    <canvas id="endc"></canvas>
+    <div class="end-inner">
+      <div class="eq" id="eq">
+        "Every door I have ever opened led me somewhere I was meant to be.<br>
+        Even the ones that hurt. Even the ones that closed behind me<br>
+        before I could say goodbye."
+      </div>
+      <div class="end-divider" id="enddiv"></div>
+      <div class="etit" id="etit">SUZUME</div>
+      <div class="esub d1" id="esub1">すずめのとじまり · SUZUME NO TOJIMARI</div>
+      <div class="esub d2" id="esub2">A film by Makoto Shinkai · 2022</div>
+      <div><button class="rpbtn" id="rpbtn" type="button" onclick="replay()">Begin the Journey Again</button></div>
+      <div class="ecred" id="ecred">
+        ✦ ✦ ✦<br>
+        This interactive experience was built in tribute to Makoto Shinkai's masterwork.<br>
+        All characters and story belong to their respective creators.<br>
+        <span>Crafted with love for the art of storytelling.</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
